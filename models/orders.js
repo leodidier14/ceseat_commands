@@ -22,7 +22,8 @@ var Order = db.define("Orders",{
     orderDate : Sequelize.DATE,
     delivredDate : Sequelize.DATE,
     requireDate : Sequelize.DATE,
-    status : Sequelize.ENUM('pendingValidation','pendingRealization','realization','pendingDelivery','delivery','delivered'),
+    price : Sequelize.FLOAT,
+    status : Sequelize.ENUM('pendingValidation','pendingRealization','realization','pendingDelivery','delivery','delivered','denied'),
     comment : Sequelize.STRING,
 })
 

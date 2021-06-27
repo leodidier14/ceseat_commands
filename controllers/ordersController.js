@@ -6,19 +6,29 @@ var Sequelize = require('sequelize')
 const ordersModel = require('../models/orders')
 const ordersMenuModel = require('../models/ordersMenus')
 const ordersArticlesModel = require('../models/ordersArticles')
-const articlesModel = require('../models/articles')
-const menuModel = require('../models/menus')
-const restaurantModel = require('../models/restaurants')
-const deliveryModel = require('../models/DeliveryMans')
-const userModel = require('../models/users')
+
 
 
 class restaurantOrdersController {
-    async getRestaurantOrders(req,res){
+
+    async getRestaurantOrdersHistory(req,res){
+        db.query('EXEC getRestaurantOrdersHistory '+req.params.restaurantId)
+        .then(result => res.status(200).send(result[0][0].OrdersList))
+        .catch(error => res.status(500).send(error))
+    }
+
+    async getRestaurantCurrentOrders(req,res){
         db.query('EXEC getRestaurantOrders '+req.params.restaurantId)
         .then(result => res.status(200).send(result[0][0].OrdersList))
         .catch(error => res.status(500).send(error))
     }
+
+    async getDeliveryCurrentOrder(req,res){
+        db.query('EXEC getDeliveryMenCurrentOrder '+req.params.deliveryManId)
+        .then(result => res.status(200).send(result[0][0].deliveryManCurrentOrder))
+        .catch(error => res.status(500).send(error))
+    }
+
     async getDeliveryManOrders(req,res){
 
         ordersModel.findAll({
@@ -29,10 +39,10 @@ class restaurantOrdersController {
             res.status(200).send(orderList)
         })
     }
+
     async addOrder(req,res){
-        
         try {
-            const order =  await ordersModel.create({"userId":req.body.userID,"restaurantId":req.body.restaurantID,"comment": req.body.comment,"status":"pendingValidation"})
+            const order =  await ordersModel.create({"userId":req.body.userID,"restaurantId":req.body.restaurantID,"comment": req.body.comment,"status":"pendingValidation","price":req.body.price})
             .then(row => { db.query('SELECT @@IDENTITY', {type: Sequelize.QueryTypes.SELECT}) 
                 .then(id => {
                     req.body.Articles.forEach( article =>  {
@@ -72,7 +82,7 @@ class restaurantOrdersController {
             }).catch((err) => {
                 res.status(500).send(err)
             })
-            }
+    }
 
     async deleteRestaurantOrders(req,res){
         ordersModel.update({
@@ -90,6 +100,22 @@ class restaurantOrdersController {
         })
         
     }
+
+    async AcceptDelivery(req,res){
+        ordersModel.update({
+            deliveryManId: req.body.deliveryManId
+        },{ where:
+                {
+                    'id':req.body.orderId
+                }
+            }
+        )
+        .then( () => {
+            res.status(200).send("succesly removed")
+        }).catch((err) => {
+            res.status(500).send(err)
+        })
+}
 
     
 }
