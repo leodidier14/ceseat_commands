@@ -1,45 +1,34 @@
 [
   {
     "type": "get",
-    "url": "/user/:id",
-    "title": "Request User information",
-    "name": "GetUser",
-    "group": "User",
+    "url": "/orders/user/:userId",
+    "title": "get user orders information",
+    "name": "getUsersOrders",
     "parameter": {
       "fields": {
-        "Parameter": [
+        "Order": [
           {
-            "group": "Parameter",
-            "type": "Number",
+            "group": "Order",
+            "type": "number",
             "optional": false,
             "field": "id",
-            "description": "<p>User's unique ID.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "firstname",
-            "description": "<p>Firstname of the User.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "lastname",
-            "description": "<p>Lastname of the User.</p>"
+            "description": "<p>Users unique ID</p>"
           }
         ]
       }
     },
     "version": "0.0.0",
     "filename": "routes/routes.js",
-    "groupTitle": "User"
+    "group": "D:\\Code\\Node JS\\Projet\\ceaseat_commands\\ceseat_commands\\routes\\routes.js",
+    "groupTitle": "D:\\Code\\Node JS\\Projet\\ceaseat_commands\\ceseat_commands\\routes\\routes.js"
+  },
+  {
+    "name": "Orders",
+    "group": "Statement",
+    "type": "",
+    "url": "",
+    "version": "0.0.0",
+    "filename": "routes/routes.js",
+    "groupTitle": "Statement"
   }
 ]

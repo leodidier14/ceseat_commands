@@ -3,17 +3,6 @@ const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 var router = express.Router();
 
-/**
- * @api {get} /user/:id Request User information
- * @apiName GetUser
- * @apiGroup User
- *
- * @apiParam {Number} id User's unique ID.
- *
- * @apiSuccess {String} firstname Firstname of the User.
- * @apiSuccess {String} lastname  Lastname of the User.
- */
-
 const orderController = require('../controllers/ordersController.js')
 const statementController = require('../controllers/statementController')
 
