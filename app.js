@@ -1,4 +1,3 @@
-var createError = require('http-errors');
 var express = require('express');
 var logger = require('morgan');
 
@@ -20,8 +19,6 @@ console.log("name : " + pjson.name);
 console.log("version : " + pjson.version);
 const apiinfos = apiinf.findOneAndUpdate({name: pjson.name , port:process.env.PORT}, {version : pjson.version}, {upsert: true}).exec()
 //################################################//
-
-
 
 var router = require('./routes/routes');
 
@@ -51,7 +48,6 @@ app.use((req,res,next) => {
 
 
 app.use('/api', router);
-
 
 
 

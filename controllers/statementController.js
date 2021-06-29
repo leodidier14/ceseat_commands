@@ -3,10 +3,10 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 var db = require('../database')
 var Sequelize = require('sequelize')
 
+
 const ordersModel = require('../models/orders')
 
 class statementController {
-
     async OrderValidation(req,res){
         ordersModel.update({
             status: 'pendingRealization'
@@ -21,7 +21,7 @@ class statementController {
         }).catch((err) => {
             res.status(500).send(err)
         })
-    }  
+    };
 
     async StatementUpdate(req,res){
         console.log('ici')
@@ -38,7 +38,7 @@ class statementController {
         }).catch((err) => {
             res.status(500).send(err)
         })
-    }
+    };
 
     async OrderDelivered(req,res){
         ordersModel.update({
@@ -54,7 +54,11 @@ class statementController {
         }).catch((err) => {
             res.status(500).send(err)
         })
-    }
+    };
+
+    
+
+
 }
 
 module.exports = new statementController();

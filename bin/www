@@ -5,29 +5,44 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('ceseat-commands:server');
+//var debug = require('debug')('ceseat-commands:server');
 var http = require('http');
+var cors = require('cors')
+
 
 /**
  * Get port from environment and store in Express.
  */
-
-var port = normalizePort(process.env.PORT || '3003');
-app.set('port', port);
-
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+const server = http.createServer(app);
+var port = normalizePort(process.env.PORT || '3003');
+
+app.set('port', port);
+app.use(cors())
+const io = require("socket.io")(server,{
+  cors: {
+    origin: "http://localhost:8080",
+    methods: ["GET", "POST"]
+  }});
+io.on('connection', (socket) => {
+  console.log('Nouvelle connexion', socket.id)
+  socket.on('disconnect', ()=> {
+    console.log('disconnect', socket.id)
+  })
+})
+ app.set('socket',io)
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-
+ 
 server.listen(port);
-server.on('listening', onListening);
 
+
+server.on('listening', onListening);
 /**
  * Normalize a port into a number, string, or false.
  */
@@ -58,5 +73,5 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  console.log('Listening on ' + bind);
 }

@@ -8,7 +8,6 @@ const ordersMenuModel = require('../models/ordersMenus')
 const ordersArticlesModel = require('../models/ordersArticles')
 
 
-
 class restaurantOrdersController {
 
     async getRestaurantOrdersHistory(req,res){
@@ -18,8 +17,11 @@ class restaurantOrdersController {
     }
 
     async getRestaurantCurrentOrders(req,res){
+        var socket = await req.app.get('socket')
+        await socket.emit('message','INCHA')
+        
         db.query('EXEC getRestaurantOrders '+req.params.restaurantId)
-        .then(result =>{console.log('result');res.status(200).send(result[0][0].OrdersList)} )
+        .then(result =>{console.log(result);res.status(200).send(result[0][0].restaurantList)} )
         .catch(error => {console.log('error');res.status(500).send(error)})
     }
 
@@ -44,8 +46,10 @@ class restaurantOrdersController {
                     })
                 })
             }
-            
         )
+        var socket = await req.app.get('socket')
+        console.log(socket)
+        await socket.emit('message','INCHA')
         res.status(200).send("commande ajouter")
         } catch(ex){
             console.log(ex)
