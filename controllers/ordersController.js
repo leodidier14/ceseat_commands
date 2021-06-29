@@ -12,14 +12,12 @@ const ordersArticlesModel = require('../models/ordersArticles')
 class restaurantOrdersController {
 
     async getRestaurantOrdersHistory(req,res){
-        console.log('lolilo2')
         db.query('EXEC getRestaurantOrdersHistory '+req.params.restaurantId)
         .then(result => {console.log(result);res.status(200).send(result[0][0].OrdersList)})
         .catch(error => res.status(500).send(error))
     }
 
     async getRestaurantCurrentOrders(req,res){
-        console.log('lolilo')
         db.query('EXEC getRestaurantOrders '+req.params.restaurantId)
         .then(result =>{console.log('result');res.status(200).send(result[0][0].OrdersList)} )
         .catch(error => {console.log('error');res.status(500).send(error)})
@@ -109,7 +107,7 @@ class restaurantOrdersController {
         }).catch((err) => {
             res.status(500).send(err)
         })
-}
+    }
 
     
 }
