@@ -12,7 +12,7 @@ class statementController {
             status: 'pendingRealization'
         },{ where:
                 {
-                    'id':req.body.orderId
+                    'id':req.body.id
                 }
             }
         )
@@ -22,61 +22,14 @@ class statementController {
             res.status(500).send(err)
         })
     }  
-    
-    async OrderDenied(req,res){
-        ordersModel.update({
-            status: 'denied'
-        },{ where:
-                {
-                    'id':req.body.orderId
-                }
-            }
-        )
-        .then( () => {
-            res.status(200).send("status change")
-        }).catch((err) => {
-            res.status(500).send(err)
-        })
-    }
 
-    async OrderInRealization(req,res){
+    async StatementUpdate(req,res){
+        console.log('ici')
         ordersModel.update({
-            status: 'realization'
+            status: req.body.status
         },{ where:
                 {
-                    'id':req.body.orderId
-                }
-            }
-        )
-        .then( () => {
-            res.status(200).send("status change")
-        }).catch((err) => {
-            res.status(500).send(err)
-        })
-    }
-
-    async OrderWaitingDelivery(req,res){
-        ordersModel.update({
-            status: 'pendingDelivery'
-        },{ where:
-                {
-                    'id':req.body.orderId
-                }
-            }
-        )
-        .then( () => {
-            res.status(200).send("status change")
-        }).catch((err) => {
-            res.status(500).send(err)
-        })
-    }
-
-    async OrderInDelivery(req,res){
-        ordersModel.update({
-            status: 'delivery'
-        },{ where:
-                {
-                    'id':req.body.orderId
+                    'id':req.body.id
                 }
             }
         )
@@ -92,7 +45,7 @@ class statementController {
             status: 'delivered'
         },{ where:
                 {
-                    'id':req.body.orderId
+                    'id':req.body.id
                 }
             }
         )
