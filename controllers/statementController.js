@@ -17,14 +17,17 @@ class statementController {
             }
         )
         .then( () => {
-            res.status(200).send("status change")
+            ordersModel.findOne({where:{id:req.body.id}}).then(async orders => {
+                var socket = await req.app.get('socket')
+                await socket.emit('UpdateStatement' + orders.dataValues.userId,{status:'pendingRealization',id:orders.dataValues.id})
+                res.status(200).send("status change")
+            })
         }).catch((err) => {
-            res.status(500).send(err)
+            res.status(400).send(err)
         })
     };
 
     async StatementUpdate(req,res){
-        console.log('ici')
         ordersModel.update({
             status: req.body.status
         },{ where:
@@ -34,15 +37,19 @@ class statementController {
             }
         )
         .then( () => {
-            res.status(200).send("status change")
+            ordersModel.findOne({where:{id:req.body.id}}).then(async orders => {
+                var socket = await req.app.get('socket')
+                await socket.emit('UpdateStatement' + orders.dataValues.userId,{status:req.body.status,id:orders.dataValues.id})
+                res.status(200).send("status change")    
+            })
         }).catch((err) => {
-            res.status(500).send(err)
+            res.status(400).send(err)
         })
     };
 
     async OrderDelivered(req,res){
         ordersModel.update({
-            status: 'delivered'
+            status: req.body.status
         },{ where:
                 {
                     'id':req.body.id
@@ -50,9 +57,14 @@ class statementController {
             }
         )
         .then( () => {
-            res.status(200).send("status change")
+            ordersModel.findOne({where:{id:req.body.id}}).then(async orders => {
+                var socket = await req.app.get('socket')
+                await socket.emit('DeliveredOrder' + orders.dataValues.restaurantId,orders.dataValues.id)
+                await socket.emit('UpdateStatement' + orders.dataValues.userId,orders.dataValues.id)
+                res.status(200).send("status change")
+            })
         }).catch((err) => {
-            res.status(500).send(err)
+            res.status(400).send(err)
         })
     };
 

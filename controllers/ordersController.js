@@ -17,11 +17,8 @@ class restaurantOrdersController {
     }
 
     async getRestaurantCurrentOrders(req,res){
-        var socket = await req.app.get('socket')
-        await socket.emit('message','INCHA')
-        
         db.query('EXEC getRestaurantOrders '+req.params.restaurantId)
-        .then(result =>{console.log(result);res.status(200).send(result[0][0].restaurantList)} )
+        .then(result =>{res.status(200).send(result[0][0].restaurantList)} )
         .catch(error => {console.log('error');res.status(500).send(error)})
     }
 
@@ -36,7 +33,7 @@ class restaurantOrdersController {
         try {
             const order =  await ordersModel.create({"userId":req.body.userId,"restaurantId":req.body.restaurantId,"comment": req.body.comment,"orderDate": req.body.orderDate,"status":"pendingValidation","price":req.body.price})
             .then(row => { db.query('SELECT @@IDENTITY', {type: Sequelize.QueryTypes.SELECT}) 
-                .then(id => {
+                .then(async (id) => {
                     req.body.Articles.forEach( article =>  {
                         ordersArticlesModel.create({"articleId":article.id,"orderId":id[0][''],"quantity":article.quantity}).catch(err => res.status(500).send(err))
                     });
@@ -44,12 +41,18 @@ class restaurantOrdersController {
                     req.body.Menus.forEach(menu => {
                         ordersMenuModel.create({"menuId":menu.id,"orderId":id[0][''],"quantity":menu.quantity}).catch(err => res.status(500).send(err))
                     })
+                    var data = {
+                        number: id[0][''],
+                        "status":"pendingValidation",
+                        price:req.body.price,
+                        comment:req.body.comment
+                    }
+                    var socket = await req.app.get('socket')
+                    await socket.emit('NewOrder' + req.body.restaurantId,data)
                 })
             }
         )
-        var socket = await req.app.get('socket')
-        console.log(socket)
-        await socket.emit('message','INCHA')
+        
         res.status(200).send("commande ajouter")
         } catch(ex){
             console.log(ex)
