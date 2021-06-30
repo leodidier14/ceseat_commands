@@ -53,22 +53,22 @@ router.delete('/restaurant/:orderId', function(req, res) {
 
 
 router.put('/statement/validate/:id', function(req, res) {
-  console.log("/orders/statement/Validate")
+  console.log("statement/Validate")
   statementController.OrderValidation(req,res)
 });
 
 router.put('/statement/update/:id', function(req, res) {
-  console.log("/orders/statement/update/:id put")
+  console.log("statement/update/:id put")
   statementController.StatementUpdate(req,res)
 });
 
 /*
 
-router.put('/orders/statement/delivered', function(req, res) {
+router.put('//orders/statement/delivered', function(req, res) {
   console.log("/orders/statement/delivered")
   statementController.OrderDelivered(req,res)
 });
-router.put('/orders/deliveryman/validate', function(req, res) {
+router.put('//orders/deliveryman/validate', function(req, res) {
   console.log("/orders/statement/Validate")
   orderController.AcceptDelivery(req,res)
 });*/

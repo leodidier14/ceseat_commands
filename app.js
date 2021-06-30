@@ -32,7 +32,7 @@ app.use(async(req,res,next) => {
   console.log('new entry')
   const tokenapp = req.headers['tokenapp'];
   checkTokenApp = await verifTokenAppController(tokenapp) 
-  if(checkTokenApp)
+  if(checkTokenApp || req.originalUrl.includes('available'))
     next()
   else 
     res.status(400).send('not an authentified APP ')
