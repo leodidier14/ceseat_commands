@@ -1,10 +1,87 @@
-# API board
+# API Orders
 > 
-This API from the Ceseat API suite allows you to manage the creation, modification, recovery and deletion of restaurant items and menus (7 routes)
-**port : 3004**
+This API of the Ceseat API suite allows to manage the creation, the modification of the status, the visualization and the deletion of the orders (9 routes)
+**port : 3003**
 
-### GET /restaurantboard/:restaurantId
-> Get restaurant board
+### POST /orders/order
+> create new order
+
+#### In :
+**autorization** :  BEARER **accesstoken**
+**body (JSON)** : {
+    "userId": "20",
+    "restaurantId": "124",
+    "price" : "26"
+}
+**params** : INT **userId**
+#### Out
+**exit** :  STRING **"order created"**
+
+------------
+### GET /orders/user/:userId
+> Get user orders
+
+#### In :
+**autorization** :  BEARER **accesstoken**
+**body (JSON)** : /
+**params** : INT **userId**
+#### Out
+**exit** : 
+{
+	"number":109,
+	"restaurantName":"MC 2 3",
+	"status":"pendingDelivery",
+	"comment":"comment pendingRealization",
+	"price":1.5,
+	"date":"2021-06-28T00:00:00+02:00",
+	"Articles":[{"name":"Potatoes","quantity":1,"Price":4.000000000000000e+000}],
+	"Menu":[{"name":"Menu potatoes","quantity":1,"Price":7}]
+}
+
+
+------------
+
+### GET /orders/deliveryman/:deliveryManId
+> Get deliveryman orders
+
+#### In :
+**autorization** :  BEARER **accesstoken**
+**body (JSON)** : /
+**params** : INT **deliveryManId**
+#### Out
+**exit** : 
+[
+{
+"deliveryManId":3,
+"restaurantName":"MC 2 3",
+"number":112,"comment":"comment delivery",
+"restaurantPhone":"0245565757",
+"restaurantAddress":
+[
+{
+"contry":"France",
+"city":"Strasbourg",
+"address":"20 rue des sauccisse",
+"zipCode":67200}],
+"clientAddress":
+[
+{
+"contry":"France",
+"city":"Munchhouse",
+"address":"20 rue des marchands",
+"zipCode":58785
+}
+],
+"clientName":"Romain KAUFFMANN",
+"clientPhone":"0789837112",
+"status":"delivery"
+}
+]
+
+------------
+
+### GET /orders/restaurant/history/:restaurantId
+> Get delivered orders
 
 #### In :
 **autorization** :  BEARER **accesstoken**
@@ -12,173 +89,93 @@ This API from the Ceseat API suite allows you to manage the creation, modificati
 **params** : INT **restaurantId**
 #### Out
 **exit** : 
-{
-    "ArticleList": [
-        {
-            "id": 10,
-            "name": "frites",
-            "restaurant": "MC 2  3",
-            "type": "snack",
-            "description": "frites salé",
-            "image": "https://e1.pngegg.com/pngimages/942/402/png-clipart-malbouffe-frites-cuisine-francaise-steak-frites-hamburger-frites-maison-plats-a-emporter-friture.png",
-            "price": 2.3,
-            "quantity": 1
-        }
-    ],
-    "MenuList": [
-        {
-            "id": 19,
-            "name": "Menu potatoes",
-            "restaurant": "MC 2  3",
-            "description": "Potatoes et boisson",
-            "image": "https://alan-pizza.fr/wp-content/uploads/2018/12/boisson-potatoes-offert.png",
-            "price": 7,
-            "quantity": 1,
-            "articles": [
-                {
-                    "id": 22,
-                    "name": "Coca ",
-                    "description": "coca 33cl",
-                    "type": "Accompagnement",
-                    "pictureLink": "https://img2.freepng.fr/20180518/pkl/kisspng-fizzy-drinks-coca-cola-diet-coke-sprite-coca-cola-5afe90566734c0.1186051315266325344227.jpg",
-                    "price": 1
-                },
-                {
-                    "id": 23,
-                    "name": "Potatoes",
-                    "description": "Potatetoes froides",
-                    "type": "Snack",
-                    "pictureLink": "https://cac.img.pmdstatic.net/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2Fcac.2F2018.2F09.2F25.2F484d0a87-d3ba-4498-b3a9-37b9870bed34.2Ejpeg/400x400/quality/80/crop-from/center/potatoes-maison-aux-epices.jpeg",
-                    "price": 4
-                }
-            ]
-        },
-    ]
-}
 
 ------------
 
-
-### POST /menu
-> Create menu
-
-#### In :
-**autorization** :  BEARER **accesstoken**
-**body (JSON)** : 
-{
-            "name": "Menu potatoes",
-            "restaurant": "MC 2  3",
-            "description": "Potatoes et boisson",
-            "image": "https://alan-pizza.fr/wp-content/uploads/2018/12/boisson-potatoes-offert.png",
-            "price": 7,
-            "quantity": 1,
-            "articles": []
-}
-**params** : /
-#### Out
-**exit** : STRING **"Added to board"**
-
-------------
-
-### PUT /menu/:menuid
-> Modify menu
-
-#### In :
-**autorization** :  BEARER **accesstoken**
-**body (JSON)** : 
-{
-            "name": "Menu potatoes",
-            "restaurant": "MC 2  3",
-            "description": "Potatoes et boisson",
-            "image": "https://alan-pizza.fr/wp-content/uploads/2018/12/boisson-potatoes-offert.png",
-            "price": 7,
-            "quantity": 1,
-            "articles": []
-}
-**params** : INT **menuid**
-#### Out
-**exit** : STRING **"Modified"**
-
-------------
-
-### GET /menu/:menuid
-> Get user infos
+### GET /orders/restaurant/current/:restaurantId
+> Get restaurant no delivered or no denied orders
 
 #### In :
 **autorization** :  BEARER **accesstoken**
 **body (JSON)** : /
-**params** : INT **menuid**
+**params** : INT **restaurantId**
 #### Out
 **exit** : 
+[
 {
-            "id": 19,
-            "name": "Menu potatoes",
-            "restaurant": "MC 2  3",
-            "description": "Potatoes et boisson",
-            "image": "https://alan-pizza.fr/wp-content/uploads/2018/12/boisson-potatoes-offert.png",
-            "price": 7,
-            "quantity": 1,
-            "articles": []
+"number":99,
+"clientName":"Guillaume Doignon",
+"status":"pendingValidation",
+"price":3,
+"articles":
+[
+{
+"name":"kebab",
+"quantity":6,
+"price":3
+},
+{
+"name":"coca",
+"quantity":4,
+"price":4
 }
+],
+"menus":
+[
+{
+"name":"Menu kebab",
+"quantity":3,
+"price":21
+}
+]
 
 ------------
 
-### POST /article
-> Create article
-
-#### In :
-**autorization** :  BEARER **accesstoken**
-**body (JSON)** : 
-                {
-                    "name": "Coca ",
-                    "description": "coca 33cl",
-                    "type": "Accompagnement",
-                    "pictureLink": "https://img2.freepng.fr/20180518/pkl/kisspng-fizzy-drinks-coca-cola-diet-coke-sprite-coca-cola-5afe90566734c0.1186051315266325344227.jpg",
-                    "price": 1
-                }
-**params** : /
-#### Out
-**exit** : STRING **"Added to board"**
-
-------------
-
-### PUT /article/:articleid
-> Modify article
-
-#### In :
-**autorization** :  BEARER **accesstoken**
-**body (JSON)** : 
-                {
-                    "name": "Coca ",
-                    "description": "coca 33cl",
-                    "type": "Accompagnement",
-                    "pictureLink": "https://img2.freepng.fr/20180518/pkl/kisspng-fizzy-drinks-coca-cola-diet-coke-sprite-coca-cola-5afe90566734c0.1186051315266325344227.jpg",
-                    "price": 1
-                }
-**params** : INT **articleid**
-#### Out
-**exit** : STRING **"Modified"**
-
-------------
-
-### GET /article/:articleid
-> Get article infos
+### DELETE /orders/user/:orderId
+> Delete user orders
 
 #### In :
 **autorization** :  BEARER **accesstoken**
 **body (JSON)** : /
-**params** : INT **articleid**
+**params** : INT **orderId**
 #### Out
-**exit** : 
-        {
-            "id": 10,
-            "name": "frites",
-            "restaurant": "MC 2  3",
-            "type": "snack",
-            "description": "frites salé",
-            "image": "https://e1.pngegg.com/pngimages/942/402/png-clipart-malbouffe-frites-cuisine-francaise-steak-frites-hamburger-frites-maison-plats-a-emporter-friture.png",
-            "price": 2.3,
-            "quantity": 1
-        }
+**exit** :  STRING **"deleted"**
 
 ------------
+
+### DELETE /orders/restaurant/:orderId
+> Delete restaurant orders
+
+#### In :
+**autorization** :  BEARER **accesstoken**
+**body (JSON)** : /
+**params** : INT **orderId**
+#### Out
+**exit** :  STRING **"deleted"**
+
+------------
+
+### PUT /orders/statement/validate/:id
+> validate order
+
+#### In :
+**autorization** :  BEARER **accesstoken**
+**body (JSON)** : /
+**params** : INT **id**
+#### Out
+**exit** :  STRING **"order validate"**
+
+------------
+
+### PUT /orders/statement/update/:id
+> modify order statement
+
+#### In :
+**autorization** :  BEARER **accesstoken**
+**body (JSON)** : /
+**params** : INT **id**
+#### Out
+**exit** :  STRING **"statement modified**
+
+------------
+
