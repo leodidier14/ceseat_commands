@@ -12,24 +12,23 @@ class restaurantOrdersController {
 
     async getRestaurantOrdersHistory(req,res){
         db.query('EXEC getRestaurantOrdersHistory '+req.params.restaurantId)
-        .then(result => {console.log(result);res.status(200).send(result[0][0].OrdersList)})
+        .then(result => {res.status(200).send(result[0][0].OrdersList)})
         .catch(error => res.status(500).send(error))
     }
 
     async getRestaurantCurrentOrders(req,res){
         db.query('EXEC getRestaurantOrders '+req.params.restaurantId)
         .then(result =>{res.status(200).send(result[0][0].restaurantList)} )
-        .catch(error => {console.log('error');res.status(500).send(error)})
+        .catch(error => {res.status(500).send(error)})
     }
 
     async getDeliveryCurrentOrder(req,res){
         db.query('EXEC getDeliveryMenCurrentOrder '+req.params.deliveryManId)
-        .then(result => {console.log(result);res.status(200).send(result[0][0].deliveryManCurrentOrder)})
+        .then(result => {res.status(200).send(result[0][0].deliveryManCurrentOrder)})
         .catch(error => res.status(500).send(error))
     }
 
     async addOrder(req,res){
-        console.log(req.body)
         try {
             const order =  await ordersModel.create({"userId":req.body.userId,"restaurantId":req.body.restaurantId,"comment": req.body.comment,"orderDate": req.body.orderDate,"status":"pendingValidation","price":req.body.price})
             .then(row => { db.query('SELECT @@IDENTITY', {type: Sequelize.QueryTypes.SELECT}) 
@@ -37,7 +36,6 @@ class restaurantOrdersController {
                     req.body.Articles.forEach( article =>  {
                         ordersArticlesModel.create({"articleId":article.id,"orderId":id[0][''],"quantity":article.quantity}).catch(err => res.status(500).send(err))
                     });
-                    console.log(id[0]['']);
                     req.body.Menus.forEach(menu => {
                         ordersMenuModel.create({"menuId":menu.id,"orderId":id[0][''],"quantity":menu.quantity}).catch(err => res.status(500).send(err))
                     })
@@ -49,13 +47,13 @@ class restaurantOrdersController {
                     }
                     var socket = await req.app.get('socket')
                     await socket.emit('NewOrder' + req.body.restaurantId,data)
+                    
                 })
             }
         )
         
         res.status(200).send("commande ajouter")
         } catch(ex){
-            console.log(ex)
             res.status(500).send(ex)
         } 
         // enclenche la gestion des status
@@ -100,21 +98,7 @@ class restaurantOrdersController {
         
     }
 
-    async AcceptDelivery(req,res){
-        ordersModel.update({
-            deliveryManId: req.body.deliveryManId
-        },{ where:
-                {
-                    'id':req.body.orderId
-                }
-            }
-        )
-        .then( () => {
-            res.status(200).send("succesly removed")
-        }).catch((err) => {
-            res.status(500).send(err)
-        })
-    }
+    
 
     
 }

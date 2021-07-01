@@ -27,12 +27,7 @@ const io = require("socket.io")(server,{
     origin: "http://localhost:8080",
     methods: ["GET", "POST"]
   }});
-io.on('connection', (socket) => {
-  console.log('Nouvelle connexion', socket.id)
-  socket.on('disconnect', ()=> {
-    console.log('disconnect', socket.id)
-  })
-})
+
  app.set('socket',io)
 
 /**

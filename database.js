@@ -5,6 +5,7 @@ require('dotenv').config({ path: path.resolve(__dirname, '.env') })
 
 const database = new Sequelize(process.env.DB_NAME, process.env.USER_NAME, process.env.USER_PW, {
     host: process.env.DB_HOST,
+    logging: false,
     dialect: 'mssql',
     pool: {
         max: 5,

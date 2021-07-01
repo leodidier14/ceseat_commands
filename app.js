@@ -9,7 +9,7 @@ const { verifTokenAppController } = require('./controllers/tokenAppController')
 const requestLog = require('./models/requestLog')
 const route = '/api/orders/'
 //Connect to db
-mongoose.connect(process.env.DB_MONGO_CONNECT, {useNewUrlParser: true}, () =>
+mongoose.connect(process.env.DB_MONGO_CONNECT, {useNewUrlParser: true,useUnifiedTopology:true}, () =>
     console.log("connected to database")
 );
 //######### Display name and version ############// 
@@ -29,7 +29,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(async(req,res,next) => {
-  console.log('new entry')
   const tokenapp = req.headers['tokenapp'];
   checkTokenApp = await verifTokenAppController(tokenapp) 
   if(checkTokenApp || req.originalUrl.includes('available'))
