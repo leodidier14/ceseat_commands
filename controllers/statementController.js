@@ -120,6 +120,7 @@ class statementController {
         })
     }
     async AcceptDelivery(req,res){
+        console.log('ici deliv accept')
         ordersModel.findOne({where:{
             'id':req.body.id
         }}).then( async (result) =>{
